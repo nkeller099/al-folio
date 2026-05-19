@@ -1,3 +1,9 @@
+---
+layout: page
+title: Content License
+permalink: /LICENSE-CONTENT/
+---
+
 # Content License — Creative Commons Attribution 4.0 International (CC BY 4.0)
 
 The **content** of this site — blog posts, research notes, project descriptions, 
