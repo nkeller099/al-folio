@@ -207,7 +207,7 @@ kramdown:
       start_line: 1
 
 # Includes & excludes
-include: ["_pages", "_scripts"]
+include: ["_pages", "_scripts", "LICENSE-CONTENT.md"]
 exclude:
   - bin/
   - CONTRIBUTING.md
