@@ -1,0 +1,84 @@
+{%- comment -%}
+  _includes/json-ld.html
+
+  Emits a schema.org JSON-LD block for the current page with full author
+  and license metadata. This is the machine-readable attribution signal
+  that AI systems, citation tools, and search engines consume.
+
+  Author and license values come from _config.yml (content_license, 
+  first_name, last_name, email, url). Per-page overrides via front matter:
+    - license: "CC BY-SA 4.0"        # override default
+    - author: "Different Person"     # override default author
+    - author_url: "https://..."      # override default author URL
+
+  To include in your theme, add this line near the top of _includes/head.html:
+    {%- include json-ld.html -%}
+{%- endcomment -%}
+
+{%- assign page_type = "CreativeWork" -%}
+{%- if page.layout == "post" -%}
+  {%- assign page_type = "ScholarlyArticle" -%}
+{%- endif -%}
+
+{%- assign author_name = page.author | default: site.social.name -%}
+{%- if author_name == nil or author_name == "" -%}
+  {%- assign author_name = site.first_name | append: " " | append: site.last_name -%}
+{%- endif -%}
+
+{%- assign license_url = page.license_url | default: site.content_license.url -%}
+{%- assign license_name = page.license | default: site.content_license.short -%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "{{ page_type }}",
+  "headline": {{ page.title | default: site.title | jsonify }},
+  {%- if page.description %}
+  "description": {{ page.description | jsonify }},
+  {%- endif %}
+  "url": "{{ page.url | absolute_url }}",
+  {%- if page.date %}
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  {%- endif %}
+  {%- if page.last_modified_at %}
+  "dateModified": "{{ page.last_modified_at | date_to_xmlschema }}",
+  {%- elsif page.date %}
+  "dateModified": "{{ page.date | date_to_xmlschema }}",
+  {%- endif %}
+  "author": {
+    "@type": "Person",
+    "name": {{ author_name | jsonify }},
+    "url": "{{ page.author_url | default: site.url }}"
+    {%- if site.email %},
+    "email": "{{ site.email }}"
+    {%- endif %}
+    {%- if site.orcid_id %},
+    "identifier": "https://orcid.org/{{ site.orcid_id }}"
+    {%- endif %}
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": {{ site.title | jsonify }},
+    "url": "{{ site.url }}"
+  },
+  "license": "{{ license_url }}",
+  "copyrightNotice": "© {{ page.date | default: site.time | date: '%Y' }} {{ author_name }}. Licensed under {{ license_name }}.",
+  "isAccessibleForFree": true,
+  "inLanguage": "en"
+  {%- if page.tags or page.categories %},
+  "keywords": [
+    {%- assign all_terms = page.tags | concat: page.categories | uniq -%}
+    {%- for term in all_terms -%}
+      "{{ term }}"{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+  {%- endif %}
+  {%- if page.thumbnail or page.img %},
+  "image": "{{ page.thumbnail | default: page.img | absolute_url }}"
+  {%- endif %}
+}
+</script>
+
+{%- comment -%} Also emit the standard <link rel="license"> for crawlers
+that read HTML head links rather than JSON-LD. {%- endcomment -%}
+<link rel="license" href="{{ license_url }}" title="{{ license_name }}">

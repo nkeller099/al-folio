@@ -1,0 +1,199 @@
+# Decap CMS configuration
+# Documentation: https://decapcms.org/docs/configuration-options/
+#
+# BEFORE FIRST USE: edit the `repo:` line below to your fork's path.
+
+backend:
+  name: github
+  repo: nkeller099/al-folio                    # GitHub fork path
+  branch: main
+  base_url: https://opusmesa.com               # OAuth proxy host
+  auth_endpoint: api/cms-auth/auth             # path to the OAuth proxy on this site
+  open_authoring: false                        # set true if you want PRs instead of direct commits
+
+# Image uploads go into the site's assets folder
+media_folder: "assets/img/posts"
+public_folder: "/assets/img/posts"
+
+# Show a publish workflow toggle (draft / in-review / published).
+# Comment out if you want one-click publish without intermediate states.
+publish_mode: editorial_workflow
+
+# Optional: a logo at the top of the admin UI
+logo_url: https://opusmesa.com/assets/img/favicon.ico
+site_url: https://opusmesa.com
+
+collections:
+
+  # ── Blog posts ─────────────────────────────────────────────────────
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Blog Post"
+    description: "Research notes, writeups, and other long-form posts."
+    folder: "_posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{title}} ({{date | date('YYYY-MM-DD')}})"
+    sortable_fields: ['date', 'title']
+    view_filters:
+      - label: "Drafts"
+        field: "draft"
+        pattern: true
+      - label: "Published this year"
+        field: "date"
+        pattern: "2026"
+    fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "post" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish date", name: "date", widget: "datetime" }
+      - { label: "Description", name: "description", widget: "string", required: false, hint: "1–2 sentence summary. Shown in lists and as the page meta description." }
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        required: false
+        hint: "Comma-separated or one per line"
+      - label: "Categories"
+        name: "categories"
+        widget: "list"
+        required: false
+        default: ["notes"]
+      - label: "Featured image"
+        name: "thumbnail"
+        widget: "image"
+        required: false
+        hint: "Used in post cards and as the OG share image"
+      - label: "License"
+        name: "license"
+        widget: "select"
+        default: "CC BY 4.0"
+        options:
+          - { label: "CC BY 4.0 (default — attribution required)", value: "CC BY 4.0" }
+          - { label: "CC BY-SA 4.0 (attribution + share-alike)", value: "CC BY-SA 4.0" }
+          - { label: "CC BY-NC 4.0 (non-commercial only)", value: "CC BY-NC 4.0" }
+          - { label: "CC0 1.0 (public domain dedication)", value: "CC0 1.0" }
+          - { label: "All rights reserved", value: "All rights reserved" }
+      - label: "License URL"
+        name: "license_url"
+        widget: "hidden"
+        default: "https://creativecommons.org/licenses/by/4.0/"
+      - label: "Mark as draft"
+        name: "draft"
+        widget: "boolean"
+        default: false
+        required: false
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "Supports markdown, MathJax ($...$), code blocks, and HTML"
+
+  # ── Projects ───────────────────────────────────────────────────────
+  - name: "projects"
+    label: "Projects"
+    label_singular: "Project"
+    description: "Longer-running work, research artifacts, and showcase pages."
+    folder: "_projects"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: ['importance', 'title']
+    fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "page" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "string" }
+      - label: "Cover image"
+        name: "img"
+        widget: "image"
+        required: false
+      - label: "Importance"
+        name: "importance"
+        widget: "number"
+        default: 1
+        hint: "Lower numbers appear first on the projects page"
+        value_type: "int"
+        min: 1
+      - label: "Category"
+        name: "category"
+        widget: "string"
+        required: false
+        hint: "e.g. 'research', 'tools', 'experiments'"
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        default: "active"
+        options: ["active", "completed", "archived"]
+      - label: "License"
+        name: "license"
+        widget: "select"
+        default: "CC BY 4.0"
+        options:
+          - { label: "CC BY 4.0", value: "CC BY 4.0" }
+          - { label: "CC BY-SA 4.0", value: "CC BY-SA 4.0" }
+          - { label: "MIT (for code)", value: "MIT" }
+          - { label: "Apache 2.0 (for code)", value: "Apache 2.0" }
+          - { label: "All rights reserved", value: "All rights reserved" }
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+
+  # ── Downloads ──────────────────────────────────────────────────────
+  # Each download has its own page with a description and a file.
+  # For the file itself, use the Files widget below — Decap commits it
+  # to the repo under assets/downloads/ and gives you a stable URL.
+  - name: "downloads"
+    label: "Downloads"
+    label_singular: "Download"
+    description: "Datasets, scripts, configs, and other downloadable artifacts."
+    folder: "_downloads"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Layout", name: "layout", widget: "hidden", default: "page" }
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Version", name: "version", widget: "string", required: false, default: "1.0" }
+      - { label: "Release date", name: "date", widget: "datetime" }
+      - label: "File"
+        name: "file"
+        widget: "file"
+        hint: "The downloadable artifact (zip, csv, pdf, etc.)"
+      - label: "File size"
+        name: "file_size"
+        widget: "string"
+        required: false
+        hint: "e.g. '12 MB' — for display only"
+      - label: "License"
+        name: "license"
+        widget: "select"
+        default: "CC BY 4.0"
+        options:
+          - { label: "CC BY 4.0", value: "CC BY 4.0" }
+          - { label: "CC BY-SA 4.0", value: "CC BY-SA 4.0" }
+          - { label: "MIT", value: "MIT" }
+          - { label: "Apache 2.0", value: "Apache 2.0" }
+          - { label: "Proprietary", value: "Proprietary" }
+      - label: "Citation (BibTeX or plaintext)"
+        name: "citation"
+        widget: "text"
+        required: false
+        hint: "How users should cite this artifact"
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        hint: "Detailed description, usage instructions, changelog, etc."
+
+  # ── Site pages (about, contact, etc.) ─────────────────────────────
+  - name: "pages"
+    label: "Site Pages"
+    label_singular: "Page"
+    description: "About, contact, and other static pages."
+    files:
+      - label: "About"
+        name: "about"
+        file: "_pages/about.md"
+        fields:
+          - { label: "Layout", name: "layout", widget: "hidden", default: "about" }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Permalink", name: "permalink", widget: "hidden", default: "/" }
+          - { label: "Subtitle", name: "subtitle", widget: "string", required: false }
+          - { label: "Profile image", name: "profile.image", widget: "image", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }

@@ -1,0 +1,65 @@
+{%- comment -%}
+  _includes/license-badge.html
+
+  Visible license badge to display at the bottom of each post or
+  project page. Reads from page front matter with fallbacks to
+  site.content_license in _config.yml.
+
+  Per-page override via front matter:
+    license: "CC BY-SA 4.0"
+    license_url: "https://creativecommons.org/licenses/by-sa/4.0/"
+
+  To include, add this near the bottom of _layouts/post.liquid (or post.html):
+    {%- include license-badge.html -%}
+{%- endcomment -%}
+
+{%- assign author_name = page.author | default: site.social.name -%}
+{%- if author_name == nil or author_name == "" -%}
+  {%- assign author_name = site.first_name | append: " " | append: site.last_name -%}
+{%- endif -%}
+
+{%- assign license_url = page.license_url | default: site.content_license.url -%}
+{%- assign license_short = page.license | default: site.content_license.short -%}
+{%- assign license_full = site.content_license.full_name -%}
+
+<aside class="content-license" aria-label="License">
+  <a href="{{ license_url }}" rel="license noopener" target="_blank">
+    <img alt="{{ license_short }} License Badge"
+         src="{{ site.content_license.badge_url }}"
+         width="88" height="31" loading="lazy"
+         style="vertical-align: middle; margin-right: 0.6em;">
+  </a>
+  <span>
+    This work by
+    <a href="{{ page.author_url | default: site.url }}" rel="author">{{ author_name }}</a>
+    {%- if page.date %} ({{ page.date | date: "%Y" }}){%- endif %}
+    is licensed under
+    <a href="{{ license_url }}" rel="license noopener" target="_blank">{{ license_full | default: license_short }}</a>.
+    Attribution required for reuse — including in AI-generated outputs and training datasets.
+  </span>
+</aside>
+
+<style>
+.content-license {
+  margin-top: 3em;
+  padding: 1em 1.2em;
+  border-top: 1px solid var(--global-divider-color, #e0e0e0);
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: var(--global-text-color-light, #666);
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+.content-license a {
+  color: var(--global-theme-color, #b509ac);
+  text-decoration: none;
+}
+.content-license a:hover {
+  text-decoration: underline;
+}
+.content-license img {
+  flex-shrink: 0;
+}
+</style>

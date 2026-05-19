@@ -1,7 +1,142 @@
----
-permalink: /robots.txt
----
-User-agent: *
-Disallow:
+# robots.txt for opusmesa.com
+#
+# Content on this site is licensed under CC BY 4.0
+# (https://creativecommons.org/licenses/by/4.0/).
+# Attribution to the author is required for any reuse, including
+# reproduction in machine-learning model outputs, training datasets,
+# and AI-generated summaries. Author and license metadata are emitted
+# in JSON-LD on every page; please honor it.
+#
+# This file expresses three preferences:
+#   1. AI TRAINING CRAWLERS — DISALLOWED
+#   2. USER-FETCH AI AGENTS (live retrieval on a human's behalf) — ALLOWED
+#   3. SEARCH ENGINE CRAWLERS — ALLOWED
+# Compliance is voluntary. The CC BY 4.0 license terms apply regardless.
 
-Sitemap: {{ site.baseurl | prepend: site.url }}/sitemap.xml
+# ─────────────────────────────────────────────────────────────────────
+# 1. AI TRAINING CRAWLERS — DISALLOWED
+# ─────────────────────────────────────────────────────────────────────
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: TimpiBot
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: AwarioRssBot
+Disallow: /
+
+User-agent: AwarioSmartBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+User-agent: SemrushBot-OCOB
+Disallow: /
+
+# ─────────────────────────────────────────────────────────────────────
+# 2. USER-FETCH AI AGENTS — ALLOWED
+#    These fetch a specific URL because a human asked an AI a live
+#    question. Distinct from training crawlers.
+# ─────────────────────────────────────────────────────────────────────
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ─────────────────────────────────────────────────────────────────────
+# 3. SEARCH ENGINE CRAWLERS — ALLOWED
+# ─────────────────────────────────────────────────────────────────────
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# ─────────────────────────────────────────────────────────────────────
+# Default — everything else is allowed, subject to the CC BY 4.0
+# license terms embedded in each page's JSON-LD metadata.
+# ─────────────────────────────────────────────────────────────────────
+
+User-agent: *
+Allow: /
+
+# Standard hygiene
+Disallow: /admin/
+Disallow: /api/
+Disallow: /static/
+
+Sitemap: https://opusmesa.com/sitemap.xml
