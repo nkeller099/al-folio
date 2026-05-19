@@ -228,6 +228,15 @@ exclude:
   - README.md
   - readme_preview/
   - vendor
+  # Upstream al-folio dev docs — not part of our deployed content
+  - AGENTS.md
+  - CLAUDE.md
+  - QUICKSTART.md
+  - TROUBLESHOOTING.md
+  - SEO.md
+  - ANALYTICS.md
+  - requirements.txt
+  - .github/
 keep_files:
   - CNAME
   - .nojekyll
